@@ -36,7 +36,7 @@ export const Leaderboard = () => {
 										{(finished || !active) && player.score.finished && index === 1 && <IconLaurelWreath2 />}
 										{(finished || !active) && player.score.finished && index === 2 && <IconLaurelWreath3 />}
 										{(finished || !active) && player.score.finished && index > 2 && <IconLaurelWreath />}
-										{!player.score.finished && active && <IconHourglassHigh />}
+										{!player.score.finished && !active && <IconHourglassHigh />}
 										{active && !finished && <IconActivity />}
 									</Group>
 									<Stack>
