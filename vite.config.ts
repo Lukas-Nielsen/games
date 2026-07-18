@@ -9,7 +9,7 @@ export default defineConfig({
 	lint: {
 		options: { typeAware: true, typeCheck: true },
 		plugins: ["eslint", "import", "oxc", "node", "react", "typescript"],
-		ignorePatterns: ["postcss.config.cts", "build"],
+		ignorePatterns: ["postcss.config.cts"],
 		rules: {
 			"react/exhaustive-deps": "off",
 			"eslint/no-unused-vars": ["warn", { fix: { imports: "fix", variables: "suggestion" } }],
@@ -30,7 +30,7 @@ export default defineConfig({
 				"unknown",
 			],
 		},
-		ignorePatterns: ["build"],
+		ignorePatterns: [],
 		sortPackageJson: true,
 		printWidth: 150,
 	},
