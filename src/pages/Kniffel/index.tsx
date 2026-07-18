@@ -1,4 +1,4 @@
-import { Button, Center, SimpleGrid, Stack } from "@mantine/core";
+import { Button, Center, SimpleGrid, Stack, Title } from "@mantine/core";
 import { modals } from "@mantine/modals";
 
 import { useGame } from "../../components/GameProvider";
@@ -33,6 +33,7 @@ export const Kniffel = () => {
 	return (
 		<Center>
 			<Stack m="md" w="100%">
+				<Title ta="center">Kniffel</Title>
 				<Button onClick={handleNewGame}>neues Spiel</Button>
 				<SimpleGrid cols={{ base: 1, sm: finished ? 1 : 2 }}>
 					{currentPlayerId && !finished && <ScoreCard key={currentPlayerId} />}

@@ -35,7 +35,7 @@ export const ScoreCard = () => {
 	};
 
 	return (
-		<ScrollAreaAutosize mah="85vh">
+		<ScrollAreaAutosize mah="80vh">
 			<Center>
 				<Stack gap="xs" renderRoot={(props) => <form {...props} onSubmit={form.onSubmit(handleNext)} />}>
 					<Title order={2} ta="center" pos="sticky" top={0} bg="var(--mantine-color-body)" style={{ zIndex: 100 }} p="md">

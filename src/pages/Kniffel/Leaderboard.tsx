@@ -14,7 +14,7 @@ export const Leaderboard = () => {
 	];
 
 	return (
-		<ScrollAreaAutosize mah="85vh">
+		<ScrollAreaAutosize mah="80vh">
 			<Stack mx="md">
 				{players
 					.sort((a, b) => b.score.total - a.score.total)
