@@ -8,7 +8,7 @@
 		"dev": "vp dev",
 		"format": "vp fmt .",
 		"prepare": "vp config",
-		"deploy": "rimraf build && vp build && git add build -f && git commit -n -m \"chore: build deploy\" && git subtree push --prefix build origin build --force && git reset --hard HEAD~1"
+		"deploy": "[ ! -d \"build/.git\" ] && rm -rf build && git worktree add build build --no-checkout; vp build && cd build && git add . && git commit -m \"chore: build deploy\" && git push origin build && cd .."
 	},
 	"dependencies": {
 		"@mantine/core": "^9.4.1",
