@@ -1,10 +1,9 @@
 import { Card, Group, ScrollAreaAutosize, Stack, Text, Title } from "@mantine/core";
 import { IconActivity, IconHourglassHigh, IconLaurelWreath, IconLaurelWreath1, IconLaurelWreath2, IconLaurelWreath3 } from "@tabler/icons-react";
 
-import { useGame } from "../../components/GameProvider";
-import { Score } from "./score";
+import { ScoreBase, useGame } from "../GameProvider";
 
-export const Leaderboard = () => {
+export const Leaderboard = <Score extends ScoreBase>() => {
 	const { players, currentPlayerId, setActivePlayer, finished } = useGame<Score>();
 
 	const podium = [

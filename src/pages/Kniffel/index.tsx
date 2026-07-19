@@ -2,7 +2,7 @@ import { Button, Center, SimpleGrid, Stack, Title } from "@mantine/core";
 import { modals } from "@mantine/modals";
 
 import { useGame } from "../../components/GameProvider";
-import { Leaderboard } from "./Leaderboard";
+import { Leaderboard } from "../../components/Leaderboard";
 import { Score } from "./score";
 import { ScoreCard } from "./ScoreCard";
 
@@ -37,7 +37,7 @@ export const Kniffel = () => {
 				<Button onClick={handleNewGame}>neues Spiel</Button>
 				<SimpleGrid cols={{ base: 1, sm: finished ? 1 : 2 }}>
 					{currentPlayerId && !finished && <ScoreCard key={currentPlayerId} />}
-					<Leaderboard />
+					<Leaderboard<Score> />
 				</SimpleGrid>
 			</Stack>
 		</Center>
