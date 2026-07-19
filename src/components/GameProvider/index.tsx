@@ -16,7 +16,8 @@ export interface GameData<Score extends ScoreBase> {
 	startingPlayerId: string | null;
 	finished: boolean;
 	shouldBeFinished: ShouldBeFinished;
-	rotateStartPlayer: boolean;
+	rotateStartPlayerAfterRounds: number | null;
+	roundsPlayed: number;
 }
 
 export interface Player<Score extends ScoreBase> {
@@ -42,7 +43,7 @@ export interface GameContextType<Score extends ScoreBase> extends GameData<Score
 	setStartingPlayer: (id: string | null) => void;
 	restart: () => void;
 	reset: () => void;
-	newGame: (shouldBeFinished: ShouldBeFinished, rotateStartPlayer?: boolean) => string;
+	newGame: (shouldBeFinished: ShouldBeFinished, rotateStartPlayerAfterRounds?: number | null) => string;
 	updateGame: (props: GameProps) => void;
 }
 
@@ -63,7 +64,8 @@ const defaultGameState = <S extends ScoreBase>(): GameData<S> => ({
 	startingPlayerId: null,
 	finished: false,
 	shouldBeFinished: "all",
-	rotateStartPlayer: false,
+	rotateStartPlayerAfterRounds: null, // null means disabled by default
+	roundsPlayed: 0,
 });
 
 export function GameProvider<Score extends ScoreBase>({ children, initialValue }: ProviderProps<Score>) {
@@ -145,32 +147,45 @@ export function GameProvider<Score extends ScoreBase>({ children, initialValue }
 			const nextActivePlayer = sortedPlayers[nextIdx];
 
 			const lastPlayerOrder = Math.max(...sortedPlayers.filter((p) => !p.score.finished).map((p) => p.order));
-			const isLastPlayer = lastPlayerOrder === -Infinity || nextActivePlayer?.order === lastPlayerOrder;
+			const currentActivePlayer = sortedPlayers[startIdx];
+			const isRoundEnding = currentActivePlayer?.order === lastPlayerOrder;
 
 			const shouldFinish =
-				isLastPlayer &&
+				isRoundEnding &&
 				((prev.shouldBeFinished === "all" && sortedPlayers.every((p) => p.score.finished)) ||
 					(prev.shouldBeFinished === "one" && sortedPlayers.some((p) => p.score.finished)));
 
 			let playersAfterRotation = prev.players;
 			let newCurrentId: string | null = nextActivePlayer?.id ?? null;
+			let nextRoundsPlayed = prev.roundsPlayed;
 
-			if (isLastPlayer && prev.rotateStartPlayer && !shouldFinish) {
-				const count = sortedPlayers.length;
+			if (isRoundEnding && !shouldFinish) {
+				nextRoundsPlayed += 1;
 
-				playersAfterRotation = sortedPlayers.map((p) => ({
-					...p,
-					order: (p.order + 1) % count,
-				}));
+				const targetRounds = prev.rotateStartPlayerAfterRounds;
+				const shouldRotate = targetRounds !== null && targetRounds > 0 && nextRoundsPlayed >= targetRounds;
 
-				const newFirst = playersAfterRotation.find((p) => p.order === 0);
-				newCurrentId = newFirst?.id ?? null;
+				if (shouldRotate) {
+					const count = sortedPlayers.length;
+					playersAfterRotation = sortedPlayers.map((p) => ({
+						...p,
+						order: (p.order + 1) % count,
+					}));
+
+					const newFirst = playersAfterRotation.find((p) => p.order === 0);
+					newCurrentId = newFirst?.id ?? null;
+					nextRoundsPlayed = 0;
+				} else {
+					const currentFirst = sortedPlayers.find((p) => p.order === 0);
+					newCurrentId = currentFirst?.id ?? null;
+				}
 			}
 
 			return {
 				...prev,
 				players: playersAfterRotation,
 				currentPlayerId: newCurrentId,
+				roundsPlayed: nextRoundsPlayed,
 				finished: shouldFinish ? true : prev.finished,
 			};
 		});
@@ -218,6 +233,7 @@ export function GameProvider<Score extends ScoreBase>({ children, initialValue }
 				players: resetPlayers,
 				currentPlayerId: startingPlayer?.id ?? null,
 				finished: false,
+				roundsPlayed: 0,
 			};
 		});
 	};
@@ -226,12 +242,12 @@ export function GameProvider<Score extends ScoreBase>({ children, initialValue }
 		clearGameData();
 	};
 
-	const newGame = (shouldBeFinished: ShouldBeFinished, rotateStartPlayer = false) => {
+	const newGame = (shouldBeFinished: ShouldBeFinished, rotateStartPlayerAfterRounds: number | null = null) => {
 		const newId = generateId();
 		setGameData({
 			...defaultGameState<Score>(),
 			shouldBeFinished,
-			rotateStartPlayer,
+			rotateStartPlayerAfterRounds,
 			id: newId,
 		});
 		return newId;
