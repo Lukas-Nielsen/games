@@ -19,8 +19,12 @@ export const PageSwitch = () => {
 			setComponent(null);
 			return;
 		}
+		if (!Object.prototype.hasOwnProperty.call(pageMap, game)) {
+			setComponent(null);
+			return;
+		}
 		const loader = pageMap[game];
-		if (!loader) {
+		if (typeof loader !== "function") {
 			setComponent(null);
 			return;
 		}
