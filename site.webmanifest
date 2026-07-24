@@ -1,6 +1,6 @@
 {
-	"name": "digitale Spielkarte",
-	"short_name": "Spielkarte",
+	"name": "digitale Punktekarten",
+	"short_name": "Punktekarten",
 	"icons": [
 		{
 			"src": "/web-app-manifest-192x192.png",
