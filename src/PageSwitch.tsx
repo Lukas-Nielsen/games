@@ -7,6 +7,7 @@ type PageMap = {
 
 const pageMap: PageMap = {
 	kniffel: () => import("./pages/Kniffel"),
+	wizard: () => import("./pages/Wizard"),
 };
 
 export const PageSwitch = () => {

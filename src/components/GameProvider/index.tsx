@@ -64,7 +64,7 @@ const defaultGameState = <S extends ScoreBase>(): GameData<S> => ({
 	startingPlayerId: null,
 	finished: false,
 	shouldBeFinished: "all",
-	rotateStartPlayerAfterRounds: null, // null means disabled by default
+	rotateStartPlayerAfterRounds: null,
 	roundsPlayed: 0,
 });
 
@@ -169,7 +169,7 @@ export function GameProvider<Score extends ScoreBase>({ children, initialValue }
 					const count = sortedPlayers.length;
 					playersAfterRotation = sortedPlayers.map((p) => ({
 						...p,
-						order: (p.order + 1) % count,
+						order: p.order === 0 ? count - 1 : p.order - 1,
 					}));
 
 					const newFirst = playersAfterRotation.find((p) => p.order === 0);

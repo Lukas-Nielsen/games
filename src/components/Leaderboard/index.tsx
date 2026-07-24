@@ -4,7 +4,7 @@ import { IconActivity, IconHourglassHigh, IconLaurelWreath, IconLaurelWreath1, I
 import { ScoreBase, useGame } from "../GameProvider";
 
 export const Leaderboard = <Score extends ScoreBase>() => {
-	const { players, currentPlayerId, setActivePlayer, finished } = useGame<Score>();
+	const { players, currentPlayerId, finished } = useGame<Score>();
 
 	const podium = [
 		{ bg: "gold", c: "black" },
@@ -26,7 +26,6 @@ export const Leaderboard = <Score extends ScoreBase>() => {
 								shadow="md"
 								bg={index < 3 ? podium[index].bg : undefined}
 								c={index < 3 ? podium[index].c : undefined}
-								onClick={() => setActivePlayer(player.id)}
 								style={{ cursor: "pointer", userSelect: "none" }}
 							>
 								<Group>

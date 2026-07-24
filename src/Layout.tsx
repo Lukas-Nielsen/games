@@ -1,6 +1,6 @@
 import { ActionIcon, Card, Drawer, Group, Portal, SimpleGrid, Stack, Text, Title } from "@mantine/core";
 import { useDisclosure } from "@mantine/hooks";
-import { IconBurger, IconDice } from "@tabler/icons-react";
+import { IconDice, IconMenu2, IconSparkleHighlight } from "@tabler/icons-react";
 import { FC } from "react";
 import { Link, Outlet, useParams } from "react-router-dom";
 
@@ -13,7 +13,10 @@ interface IGame {
 	icon: FC<any>;
 }
 
-const games: IGame[] = [{ label: "Kniffel", value: "kniffel", icon: IconDice, description: "Klever knobeln - mit Köpfchen" }];
+const games: IGame[] = [
+	{ label: "Kniffel", value: "kniffel", icon: IconDice, description: "Klever knobeln - mit Köpfchen" },
+	{ label: "Wizard", value: "wizard", icon: IconSparkleHighlight, description: "übe dich in der Kunst der Vorhersage!" },
+];
 
 export const Layout = () => {
 	const { game: currentGame } = useParams<IParams>();
@@ -34,7 +37,7 @@ export const Layout = () => {
 							bg={currentGame === game.value ? "cyan" : "gray"}
 							renderRoot={(props) => <Link {...props} to={`/${game.value}`} onClick={handleClick} />}
 						>
-							<Group>
+							<Group wrap="nowrap">
 								<game.icon />
 								<Stack gap="0.25rem">
 									<Title order={3}>{game.label}</Title>
@@ -46,8 +49,8 @@ export const Layout = () => {
 				</SimpleGrid>
 			</Drawer>
 			<Portal>
-				<ActionIcon onClick={open} pos="fixed" bottom="5rem" right="5rem" variant="filled">
-					<IconBurger />
+				<ActionIcon onClick={open} pos="fixed" bottom="3rem" right="3rem" variant="filled" size="xl">
+					<IconMenu2 size={32} />
 				</ActionIcon>
 			</Portal>
 			<Outlet />
