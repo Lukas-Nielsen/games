@@ -1,4 +1,4 @@
-import { execSync } from "child_process";
+import { execFileSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -24,9 +24,9 @@ function parseArgs(): { dir: string; branch: string; message: string } {
 	return options;
 }
 
-function run(command: string, cwd?: string): void {
-	console.log(`> ${command}`);
-	execSync(command, { stdio: "inherit", cwd });
+function run(command: string, args: string[] = [], cwd?: string): void {
+	console.log(`> ${command} ${args.join(" ")}`.trim());
+	execFileSync(command, args, { stdio: "inherit", cwd });
 }
 
 function deploy(): void {
@@ -45,16 +45,16 @@ function deploy(): void {
 	try {
 		// 2. Clean up any existing worktree reference
 		try {
-			execSync(`git worktree remove --force ${dir}`, { stdio: "ignore" });
+			execFileSync("git", ["worktree", "remove", "--force", dir], { stdio: "ignore" });
 		} catch {
 			// Ignore error if worktree doesn't exist yet
 		}
 
-		run(`rm -rf ${targetDir}`);
-		run(`mkdir ${targetDir}`);
+		fs.rmSync(targetDir, { recursive: true, force: true });
+		fs.mkdirSync(targetDir, { recursive: true });
 
 		// 3. Re-add the worktree without checking out existing files
-		run(`git worktree add ${dir} ${branch} --no-checkout`);
+		run("git", ["worktree", "add", dir, branch, "--no-checkout"]);
 
 		// 4. Restore the worktree `.git` marker if we backed it up
 		if (fs.existsSync(tempGitBackup)) {
@@ -64,22 +64,22 @@ function deploy(): void {
 		run("vp build");
 
 		// 5. Commit and push inside the target folder
-		run("git add -A", targetDir);
+		run("git", ["add", "-A"], targetDir);
 
 		try {
-			run(`git commit -m "${message}"`, targetDir);
+			run("git", ["commit", "-m", message], targetDir);
 		} catch {
 			console.log("⚠️ No changes to commit.");
 		}
 
-		run(`git push origin ${branch} -f`, targetDir);
+		run("git", ["push", "origin", branch, "-f"], targetDir);
 
 		console.log(`\n✅ Successfully deployed ${dir} to ${branch}!`);
 	} catch (error) {
 		console.error("\n❌ Deployment failed:", error);
 		process.exit(1);
 	} finally {
-		run(`rm -rf ${targetDir}`);
+		fs.rmSync(targetDir, { recursive: true, force: true });
 		// Cleanup temporary backup file if left over
 		if (fs.existsSync(tempGitBackup)) {
 			fs.rmSync(tempGitBackup, { force: true });
