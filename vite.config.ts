@@ -9,7 +9,7 @@ export default defineConfig({
 	lint: {
 		options: { typeAware: true, typeCheck: true },
 		plugins: ["eslint", "import", "oxc", "node", "react", "typescript"],
-		ignorePatterns: ["postcss.config.cts"],
+		ignorePatterns: ["postcss.config.cts", "deploy.ts"],
 		rules: {
 			"react/exhaustive-deps": "off",
 			"eslint/no-unused-vars": ["warn", { fix: { imports: "fix", variables: "suggestion" } }],

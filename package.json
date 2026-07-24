@@ -8,26 +8,27 @@
 		"dev": "vp dev",
 		"format": "vp fmt .",
 		"prepare": "vp config",
-		"deploy": "[ ! -d \"build/.git\" ] && rm -rf build && git worktree add build build --no-checkout; vp build && cd build && git add . && git commit -m \"chore: build deploy\" && git push origin build && cd .."
+		"deploy": "node deploy.ts"
 	},
 	"dependencies": {
-		"@mantine/core": "^9.4.1",
-		"@mantine/form": "^9.4.1",
-		"@mantine/hooks": "^9.4.1",
-		"@mantine/modals": "^9.4.1",
-		"@mantine/notifications": "^9.4.1",
-		"@tabler/icons-react": "^3.44.0",
+		"@mantine/core": "^9.4.2",
+		"@mantine/form": "^9.4.2",
+		"@mantine/hooks": "^9.4.2",
+		"@mantine/modals": "^9.4.2",
+		"@mantine/notifications": "^9.4.2",
+		"@tabler/icons-react": "^3.45.0",
 		"clsx": "^2.1.1",
-		"react": "^19.2.7",
-		"react-dom": "^19.2.7",
+		"react": "^19.2.8",
+		"react-dom": "^19.2.8",
 		"react-router-dom": "^7.18.1"
 	},
 	"devDependencies": {
 		"@types/node": "^26.1.1",
 		"@types/react": "^19.2.17",
 		"@types/react-dom": "^19.2.3",
-		"@vitejs/plugin-react": "^6.0.3",
-		"postcss": "^8.5.16",
+		"@vitejs/plugin-react": "^6.0.4",
+		"node": "^26.5.0",
+		"postcss": "^8.5.22",
 		"postcss-preset-mantine": "^1.18.0",
 		"postcss-simple-vars": "^7.0.1",
 		"rimraf": "^6.1.3",
@@ -49,5 +50,5 @@
 			"last 1 safari version"
 		]
 	},
-	"packageManager": "pnpm@11.12.0"
+	"packageManager": "pnpm@11.17.0"
 }
