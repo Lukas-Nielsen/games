@@ -148,7 +148,7 @@ export function GameProvider<Score extends ScoreBase>({ children, initialValue }
 
 			const lastPlayerOrder = Math.max(...sortedPlayers.filter((p) => !p.score.finished).map((p) => p.order));
 			const currentActivePlayer = sortedPlayers[startIdx];
-			const isRoundEnding = currentActivePlayer?.order === lastPlayerOrder;
+			const isRoundEnding = currentActivePlayer?.order === lastPlayerOrder || lastPlayerOrder === -Infinity;
 
 			const shouldFinish =
 				isRoundEnding &&
