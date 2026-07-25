@@ -2,18 +2,21 @@ import { execFileSync } from "child_process";
 import * as fs from "fs";
 import * as path from "path";
 
-// Parse command-line arguments (e.g. --dir=dist --branch=gh-pages)
-function parseArgs(): { dir: string; branch: string; message: string } {
+// Parse command-line arguments (e.g. --source=dist --branch=gh-pages)
+function parseArgs(): { source: string; branch: string; message: string; target: string } {
 	const args = process.argv.slice(2);
 	const options = {
-		dir: "build",
+		source: "build",
+		target: "temp",
 		branch: "build",
 		message: "🚀 Deploy commit",
 	};
 
 	args.forEach((arg) => {
-		if (arg.startsWith("--dir=")) {
-			options.dir = arg.split("=")[1];
+		if (arg.startsWith("--source=")) {
+			options.source = arg.split("=")[1];
+		} else if (arg.startsWith("--target=")) {
+			options.target = arg.split("=")[1];
 		} else if (arg.startsWith("--branch=")) {
 			options.branch = arg.split("=")[1];
 		} else if (arg.startsWith("--message=")) {
@@ -30,11 +33,12 @@ function run(command: string, args: string[] = [], cwd?: string): void {
 }
 
 function deploy(): void {
-	const { dir, branch, message } = parseArgs();
-	const targetDir = path.resolve(process.cwd(), dir);
-	const tempGitBackup = path.resolve(process.cwd(), `.git_${dir}_tmp`);
+	const { source, branch, message, target } = parseArgs();
+	const targetDir = path.resolve(process.cwd(), target);
+	const sourceDir = path.resolve(process.cwd(), source);
+	const tempGitBackup = path.resolve(process.cwd(), `.git_${source}_tmp`);
 
-	console.log(`🚀 Deploying folder "${dir}" to branch "${branch}"...\n`);
+	console.log(`🚀 Deploying folder "${source}" to branch "${branch}"...\n`);
 
 	// 1. Save worktree `.git` marker if it exists before rebuild wipes it
 	const worktreeGitFile = path.join(targetDir, ".git");
@@ -45,7 +49,7 @@ function deploy(): void {
 	try {
 		// 2. Clean up any existing worktree reference
 		try {
-			execFileSync("git", ["worktree", "remove", "--force", dir], { stdio: "ignore" });
+			execFileSync("git", ["worktree", "remove", "--force", targetDir], { stdio: "ignore" });
 		} catch {
 			// Ignore error if worktree doesn't exist yet
 		}
@@ -54,14 +58,14 @@ function deploy(): void {
 		fs.mkdirSync(targetDir, { recursive: true });
 
 		// 3. Re-add the worktree without checking out existing files
-		run("git", ["worktree", "add", dir, branch, "--no-checkout"]);
+		run("git", ["worktree", "add", targetDir, branch, "--no-checkout"]);
 
 		// 4. Restore the worktree `.git` marker if we backed it up
 		if (fs.existsSync(tempGitBackup)) {
 			fs.renameSync(tempGitBackup, worktreeGitFile);
 		}
 
-		run("vp build");
+		fs.cpSync(sourceDir, targetDir, { recursive: true, force: true });
 
 		// 5. Commit and push inside the target folder
 		run("git", ["add", "-A"], targetDir);
@@ -74,7 +78,7 @@ function deploy(): void {
 
 		run("git", ["push", "origin", branch, "-f"], targetDir);
 
-		console.log(`\n✅ Successfully deployed ${dir} to ${branch}!`);
+		console.log(`\n✅ Successfully deployed ${source} to ${branch}!`);
 	} catch (error) {
 		console.error("\n❌ Deployment failed:", error);
 		process.exit(1);

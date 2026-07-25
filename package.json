@@ -8,7 +8,7 @@
 		"dev": "vp dev",
 		"format": "vp fmt .",
 		"prepare": "vp config",
-		"deploy": "node deploy.ts"
+		"deploy": "vp build && node deploy.ts"
 	},
 	"dependencies": {
 		"@mantine/core": "^9.4.2",
