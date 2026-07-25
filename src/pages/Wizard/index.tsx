@@ -1,5 +1,6 @@
 import { Button, Center, SimpleGrid, Stack, Title } from "@mantine/core";
 import { modals } from "@mantine/modals";
+import { useParams } from "react-router-dom";
 
 import { useGame } from "../../components/GameProvider";
 import { Leaderboard } from "../../components/Leaderboard";
@@ -7,7 +8,8 @@ import { Score } from "./score";
 import { ScoreCard } from "./ScoreCard";
 
 export const Wizard = () => {
-	const { newGame, currentPlayerId, finished } = useGame<Score>();
+	const { newGame, currentPlayerId, finished, name, updateGame } = useGame<Score>();
+	const { game } = useParams();
 
 	const handleNewGame = () => {
 		modals.openConfirmModal({
@@ -23,6 +25,7 @@ export const Wizard = () => {
 
 	const handleNewGameConfirm = () => {
 		newGame("all", 2);
+		updateGame({ name: "wizard" });
 		modals.openContextModal({
 			modal: "wizard-new-game",
 			innerProps: {},
@@ -35,10 +38,12 @@ export const Wizard = () => {
 			<Stack m="md" w="100%">
 				<Title ta="center">Wizard</Title>
 				<Button onClick={handleNewGame}>neues Spiel</Button>
-				<SimpleGrid cols={{ base: 1, sm: finished ? 1 : 2 }}>
-					{currentPlayerId && !finished && <ScoreCard key={currentPlayerId} />}
-					<Leaderboard<Score> />
-				</SimpleGrid>
+				{game === name && (
+					<SimpleGrid cols={{ base: 1, sm: finished ? 1 : 2 }}>
+						{currentPlayerId && !finished && <ScoreCard key={currentPlayerId} />}
+						<Leaderboard<Score> />
+					</SimpleGrid>
+				)}
 			</Stack>
 		</Center>
 	);
