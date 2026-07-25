@@ -1,9 +1,10 @@
-import { ActionIcon, Button, Group, Stack, TextInput } from "@mantine/core";
-import { isNotEmpty, useForm } from "@mantine/form";
-import { ContextModalProps } from "@mantine/modals";
-import { IconDeviceFloppy, IconPlus, IconTrash } from "@tabler/icons-react";
+import { Button, Group, Stack } from "@mantine/core";
+import { useForm } from "@mantine/form";
+import { ContextModalProps, modals } from "@mantine/modals";
+import { IconDeviceFloppy, IconPlus } from "@tabler/icons-react";
 
-import { generateId, Player, useGame } from "../../components/GameProvider";
+import { ChoosePlayers } from "../../components/ChoosePlayers";
+import { Player, useGame } from "../../components/GameProvider";
 import { Score, ScoreDefault } from "./score";
 
 interface Form {
@@ -14,13 +15,8 @@ export const NewGame = ({ context, id }: ContextModalProps) => {
 	const { addPlayer } = useGame<Score>();
 
 	const form = useForm<Form>({
-		initialValues: { players: [{ name: "", score: ScoreDefault, id: generateId() }] },
-		validate: {
-			players: {
-				name: isNotEmpty("bitte etwas Eingeben"),
-			},
-		},
-		validateInputOnChange: true,
+		mode: "controlled",
+		initialValues: { players: [] },
 	});
 
 	const handleSubmit = (values: Form) => {
@@ -28,27 +24,19 @@ export const NewGame = ({ context, id }: ContextModalProps) => {
 		context.closeModal(id);
 	};
 
+	const handleNewPlayer = () => {
+		modals.openContextModal({
+			modal: "add-player",
+			innerProps: {},
+			title: "neuen Spieler hinzufügen",
+		});
+	};
+
 	return (
 		<Stack renderRoot={(props) => <form {...props} onSubmit={form.onSubmit(handleSubmit)} />}>
-			{form.getValues().players.map((player, index) => (
-				<Group key={player.id}>
-					<TextInput
-						placeholder="Peter Pan"
-						withAsterisk
-						style={{ flex: 1 }}
-						key={form.key(`players.${index}.name`)}
-						{...form.getInputProps(`players.${index}.name`)}
-					/>
-					<ActionIcon color="red" onClick={() => form.removeListItem("players", index)}>
-						<IconTrash />
-					</ActionIcon>
-				</Group>
-			))}
+			<ChoosePlayers defaultScore={ScoreDefault} form={form} />
 			<Group justify="space-between">
-				<Button
-					leftSection={<IconPlus />}
-					onClick={() => form.insertListItem("players", { name: "", score: ScoreDefault, id: generateId() })}
-				>
+				<Button leftSection={<IconPlus />} onClick={handleNewPlayer}>
 					neuer Spieler
 				</Button>
 				<Button type="submit" leftSection={<IconDeviceFloppy />} color="lime">

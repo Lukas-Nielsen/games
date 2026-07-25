@@ -7,6 +7,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 
 import { GameProvider } from "./components/GameProvider";
+import { PlayerProvider } from "./components/PlayerProvider";
 import Main from "./Main";
 import { modals } from "./modals";
 
@@ -17,10 +18,12 @@ if (rootElement) {
 		<StrictMode>
 			<MantineProvider defaultColorScheme="auto">
 				<GameProvider>
-					<ModalsProvider modals={modals} labels={{ cancel: "abbrechen", confirm: "OK" }}>
-						<Notifications />
-						<Main />
-					</ModalsProvider>
+					<PlayerProvider>
+						<ModalsProvider modals={modals} labels={{ cancel: "abbrechen", confirm: "OK" }}>
+							<Notifications />
+							<Main />
+						</ModalsProvider>
+					</PlayerProvider>
 				</GameProvider>
 			</MantineProvider>
 		</StrictMode>,

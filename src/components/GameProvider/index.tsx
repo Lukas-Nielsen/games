@@ -1,6 +1,8 @@
 import { useLocalStorage } from "@mantine/hooks";
 import { createContext, ReactNode, useContext } from "react";
 
+import { PlayerBase } from "../PlayerProvider";
+
 export interface ScoreBase {
 	total: number;
 	finished: boolean;
@@ -20,9 +22,7 @@ export interface GameData<Score extends ScoreBase> {
 	roundsPlayed: number;
 }
 
-export interface Player<Score extends ScoreBase> {
-	id: string;
-	name: string;
+export interface Player<Score extends ScoreBase> extends PlayerBase {
 	score: Score;
 	order: number;
 	originalOrder: number;
