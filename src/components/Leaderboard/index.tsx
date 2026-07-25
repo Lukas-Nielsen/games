@@ -26,7 +26,7 @@ export const Leaderboard = <Score extends ScoreBase>() => {
 								shadow="md"
 								bg={index < 3 ? podium[index].bg : undefined}
 								c={index < 3 ? podium[index].c : undefined}
-								style={{ cursor: "pointer", userSelect: "none" }}
+								style={{ userSelect: "none" }}
 							>
 								<Group>
 									<Group w="5rem" justify="center">
