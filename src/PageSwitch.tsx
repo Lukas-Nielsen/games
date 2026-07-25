@@ -1,5 +1,5 @@
 import { ComponentType, useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 type PageMap = {
 	[key: string]: () => Promise<{ default: ComponentType<any> }>;

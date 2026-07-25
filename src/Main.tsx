@@ -1,5 +1,5 @@
 import { lazy, useEffect } from "react";
-import { HashRouter, Route, Routes, useNavigate } from "react-router-dom";
+import { HashRouter, Route, Routes, useNavigate } from "react-router";
 
 import { Layout } from "./Layout";
 

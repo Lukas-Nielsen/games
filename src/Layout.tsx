@@ -2,7 +2,7 @@ import { ActionIcon, Card, Drawer, Group, Portal, SimpleGrid, Stack, Text, Title
 import { useDisclosure } from "@mantine/hooks";
 import { IconDice, IconMenu2, IconSparkleHighlight } from "@tabler/icons-react";
 import { FC } from "react";
-import { Link, Outlet, useParams } from "react-router-dom";
+import { Link, Outlet, useParams } from "react-router";
 
 import { IParams } from "./model/params";
 

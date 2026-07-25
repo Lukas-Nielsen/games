@@ -1,6 +1,6 @@
 import { Button, Center, SimpleGrid, Stack, Title } from "@mantine/core";
 import { modals } from "@mantine/modals";
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router";
 
 import { useGame } from "../../components/GameProvider";
 import { Leaderboard } from "../../components/Leaderboard";
