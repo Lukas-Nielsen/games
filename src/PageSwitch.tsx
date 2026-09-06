@@ -1,12 +1,11 @@
 import { ComponentType, useEffect, useState } from "react";
 import { useParams } from "react-router";
 
-type PageMap = {
-	[key: string]: () => Promise<{ default: ComponentType<any> }>;
-};
+type PageMap = Record<string, () => Promise<{ default: ComponentType<any> }>>;
 
 const pageMap: PageMap = {
 	kniffel: () => import("./pages/Kniffel"),
+	"kniffel-extreme": () => import("./pages/KniffelExtreme"),
 	wizard: () => import("./pages/Wizard"),
 };
 

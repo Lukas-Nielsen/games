@@ -15,6 +15,7 @@ interface IGame {
 
 const games: IGame[] = [
 	{ label: "Kniffel", value: "kniffel", icon: IconDice, description: "Klever knobeln - mit Köpfchen" },
+	{ label: "Kniffel Extreme", value: "kniffel-extreme", icon: IconDice, description: "Klever knobeln - mit Köpfchen" },
 	{ label: "Wizard", value: "wizard", icon: IconSparkleHighlight, description: "übe dich in der Kunst der Vorhersage!" },
 ];
 
