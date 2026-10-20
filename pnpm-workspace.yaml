@@ -4,7 +4,7 @@ allowBuilds:
     node: true
 catalog:
     vite: npm:@voidzero-dev/vite-plus-core@0.3.0
-    vite-plus: 0.3.0
+    vite-plus: 1.1.0
 minimumReleaseAgeExclude:
     - "@voidzero-dev/vite-plus-core@0.2.3"
     - "@voidzero-dev/vite-plus-darwin-arm64@0.2.3"
